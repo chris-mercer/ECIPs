@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: "bundler"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Do not resolve a version published in the last 7 days. A malicious
+    # publish is typically caught and yanked within hours; the delay is
+    # margin against detection lag rather than against the attack itself.
+    cooldown:
+      default-days: 7
+      semver-major-days: 21

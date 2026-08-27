@@ -36,5 +36,8 @@ gem "html-proofer", '>=3.3.1'
 gem 'front_matter_parser', '~> 0.1.1'
 gem 'rake'
 
-# Rel issue: https://github.com/ethereumclassic/ECIPs/pull/308#issuecomment-618044919
-gem 'faraday', '~> 0.17.3'
+# Held below 2.0: sawyer (via octokit) requires faraday (> 0.8, < 2.0).
+# 1.10.6 is the lowest release in that range clearing CVE-2026-54297 (recursion
+# DoS) and CVE-2026-25765 (SSRF), which affect the previous 0.17.3 pin.
+# Original 0.17.3 pin: https://github.com/ethereumclassic/ECIPs/pull/308#issuecomment-618044919
+gem 'faraday', '~> 1.10.6'
