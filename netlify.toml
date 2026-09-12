@@ -1,0 +1,28 @@
+# Netlify: pull request deploy previews only.
+#
+# The production site is served by GitHub Pages. Netlify is used solely to
+# build a preview for each pull request, so every other deploy context
+# (production, branch-deploy) is skipped via the ignore command below. The
+# ignore command runs before the build; exit 0 means "skip this deploy".
+[build]
+  # Install gems explicitly. Netlify does this itself for git-triggered
+  # builds, but builds started through the Netlify CLI or agent skip that
+  # phase and fail with "bundler: command not found: jekyll".
+  command = "bundle install && bundle exec jekyll build --future"
+  publish = "_site"
+  ignore = "test \"$CONTEXT\" != \"deploy-preview\""
+
+[build.environment]
+  # Matches the Ruby pinned in .github/workflows/*.yml and .ruby-version.
+  RUBY_VERSION = "3.2.9"
+  # Gemfile.lock currently says BUNDLED WITH 2.1.4, which crashes with
+  # SystemStackError on Ruby 3.x. Force the Bundler that ships with Ruby
+  # 3.2.9 instead. Remove once the lockfile is regenerated (see PR #583).
+  BUNDLER_VERSION = "2.4.19"
+  # Keep Jekyll in development mode, as the CI workflows do. With
+  # JEKYLL_ENV=production, jekyll-github-metadata (pulled in by github-pages)
+  # rewrites site.baseurl from the GitHub Pages API, and when that lookup
+  # fails on Netlify it falls back to /pages/<owner>/<repo>, which breaks
+  # every link and stylesheet in the preview. Set explicitly so a UI-level
+  # env var cannot override it.
+  JEKYLL_ENV = "development"

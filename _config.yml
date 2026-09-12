@@ -36,6 +36,7 @@ permalink: /:path
 exclude:
   - Gemfile
   - Gemfile.lock
+  - netlify.toml
   - node_modules
   - vendor/bundle/
   - vendor/cache/
